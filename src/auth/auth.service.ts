@@ -9,17 +9,18 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async validateUser(username: string, password: string): Promise<any> {
+  async validateUser(username: string, pass: string): Promise<any> {
     const user = await this.usersService.findOnebyUsername(username);
-    if (user && user.password === password) {
-      const { password, username, ...rest } = user;
-      return rest;
+    if (user && user.password === pass) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password, ...result } = user;
+      return result;
     }
     return null;
   }
 
   async login(user: any) {
-    const payload = { name: user.name, sub: user.id };
+    const payload = { username: user.username, sub: user.userId };
     return {
       access_token: this.jwtService.sign(payload),
     };
